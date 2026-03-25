@@ -9,8 +9,7 @@
         <meta name="viewport" content="./width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no.bin">
     </head>
     <body style="font-family:system-ui, sans-serif;line-height:1.5;max-width:900px;margin:0 auto;padding:20px;">
-        <h1>Data Migration (Old Site Retired)</h1>
-        <p>This page is now a migration helper. The old game is disabled here; please use the new site: <a href="https://bookshelf2026.github.io/race" target="_blank" rel="noopener">bookshelf2026.github.io/race</a>.</p>
+        <h1>Data Migration (This Site Retired)</h1>
 
         <h2>Step 1: Export your data from this site</h2>
         <p>Click the button below to create <code>my-data.json</code> containing your localStorage.</p>
@@ -18,24 +17,7 @@
         <p style="margin-top:4px;color:#666;">You can then upload that file on new site (or use URL-import link below).</p>
 
         <h2>Step 2: Import on the new site with query parameter</h2>
-        <p>Alternatively, migrate directly in-browser using URL redirect:</p>
-        <button id="migrate-localstorage" style="padding:10px 14px;font-size:14px;margin-right:8px;">Migrate via URL</button>
         <p style="margin-top:4px;color:#666;">This encodes your localStorage and sends you to <code>https://bookshelf2026.github.io/race?import=...</code>.</p>
-
-        <h2>New site import (for implementation)</h2>
-        <pre style="background:#f7f7f7;border:1px solid #ddd;padding:10px;overflow:auto;"><code>const params = new URLSearchParams(window.location.search);
-const data = params.get('import');
-if (data) {
-  try {
-    const decoded = atob(decodeURIComponent(data));
-    const obj = JSON.parse(decoded);
-    Object.entries(obj).forEach(([k,v]) =&gt; localStorage.setItem(k,v));
-    alert('Data imported successfully!');
-  } catch (err) {
-    console.error('Import failed', err);
-    alert('Import failed: '+err.message);
-  }
-}</code></pre>
 
         <script>
             document.getElementById('export-localstorage').addEventListener('click', function () {
