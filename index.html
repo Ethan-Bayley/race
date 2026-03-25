@@ -10,25 +10,36 @@
         <script defer="defer" src="./error_screen.bundle.js"></script>
         <script defer="defer" src="./main.bundle.js"></script>
     </head>
-    <body>
-        <button id="migrate-localstorage" style="position:fixed;top:10px;right:10px;z-index:9999;padding:8px 12px;font-size:13px;">Migrate localStorage</button>
-        <button id="export-localstorage" style="position:fixed;top:50px;right:10px;z-index:9999;padding:8px 12px;font-size:13px;">Export localStorage</button>
-        <canvas id="screen"></canvas>
-        <div id="ui"></div>
-        <div id="transition-layer"></div>
-        <script>
-            document.getElementById('migrate-localstorage').addEventListener('click', function () {
-                try {
-                    var payload = JSON.stringify(localStorage);
-                    var encoded = btoa(payload);
-                    var target = 'https://bookshelf2026.github.io/race?import=' + encodeURIComponent(encoded);
-                    window.location.href = target;
-                } catch (err) {
-                    console.error('LocalStorage migration failed', err);
-                    alert('Failed to export localStorage: ' + err.message);
-                }
-            });
+    <body style="font-family:system-ui, sans-serif;line-height:1.5;max-width:900px;margin:0 auto;padding:20px;">
+        <h1>Data Migration (Old Site Retired)</h1>
+        <p>This page is now a migration helper. The old game is disabled here; please use the new site: <a href="https://bookshelf2026.github.io/race" target="_blank" rel="noopener">bookshelf2026.github.io/race</a>.</p>
 
+        <h2>Step 1: Export your data from this site</h2>
+        <p>Click the button below to create <code>my-data.json</code> containing your localStorage.</p>
+        <button id="export-localstorage" style="padding:10px 14px;font-size:14px;margin-right:8px;">Export localStorage</button>
+        <p style="margin-top:4px;color:#666;">You can then upload that file on new site (or use URL-import link below).</p>
+
+        <h2>Step 2: Import on the new site with query parameter</h2>
+        <p>Alternatively, migrate directly in-browser using URL redirect:</p>
+        <button id="migrate-localstorage" style="padding:10px 14px;font-size:14px;margin-right:8px;">Migrate via URL</button>
+        <p style="margin-top:4px;color:#666;">This encodes your localStorage and sends you to <code>https://bookshelf2026.github.io/race?import=...</code>.</p>
+
+        <h2>New site import (for implementation)</h2>
+        <pre style="background:#f7f7f7;border:1px solid #ddd;padding:10px;overflow:auto;"><code>const params = new URLSearchParams(window.location.search);
+const data = params.get('import');
+if (data) {
+  try {
+    const decoded = atob(decodeURIComponent(data));
+    const obj = JSON.parse(decoded);
+    Object.entries(obj).forEach(([k,v]) =&gt; localStorage.setItem(k,v));
+    alert('Data imported successfully!');
+  } catch (err) {
+    console.error('Import failed', err);
+    alert('Import failed: '+err.message);
+  }
+}</code></pre>
+
+        <script>
             document.getElementById('export-localstorage').addEventListener('click', function () {
                 try {
                     var payload = JSON.stringify(localStorage, null, 2);
@@ -44,6 +55,18 @@
                 } catch (err) {
                     console.error('LocalStorage export failed', err);
                     alert('Failed to export localStorage file: ' + err.message);
+                }
+            });
+
+            document.getElementById('migrate-localstorage').addEventListener('click', function () {
+                try {
+                    var payload = JSON.stringify(localStorage);
+                    var encoded = btoa(payload);
+                    var target = 'https://bookshelf2026.github.io/race?import=' + encodeURIComponent(encoded);
+                    window.location.href = target;
+                } catch (err) {
+                    console.error('LocalStorage migration failed', err);
+                    alert('Failed to export localStorage: ' + err.message);
                 }
             });
         </script>
