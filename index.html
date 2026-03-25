@@ -12,6 +12,7 @@
     </head>
     <body>
         <button id="migrate-localstorage" style="position:fixed;top:10px;right:10px;z-index:9999;padding:8px 12px;font-size:13px;">Migrate localStorage</button>
+        <button id="export-localstorage" style="position:fixed;top:50px;right:10px;z-index:9999;padding:8px 12px;font-size:13px;">Export localStorage</button>
         <canvas id="screen"></canvas>
         <div id="ui"></div>
         <div id="transition-layer"></div>
@@ -25,6 +26,24 @@
                 } catch (err) {
                     console.error('LocalStorage migration failed', err);
                     alert('Failed to export localStorage: ' + err.message);
+                }
+            });
+
+            document.getElementById('export-localstorage').addEventListener('click', function () {
+                try {
+                    var payload = JSON.stringify(localStorage, null, 2);
+                    var blob = new Blob([payload], { type: 'application/json' });
+                    var url = URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'my-data.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                } catch (err) {
+                    console.error('LocalStorage export failed', err);
+                    alert('Failed to export localStorage file: ' + err.message);
                 }
             });
         </script>
