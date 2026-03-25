@@ -11,8 +11,22 @@
         <script defer="defer" src="./main.bundle.js"></script>
     </head>
     <body>
+        <button id="migrate-localstorage" style="position:fixed;top:10px;right:10px;z-index:9999;padding:8px 12px;font-size:13px;">Migrate localStorage</button>
         <canvas id="screen"></canvas>
         <div id="ui"></div>
         <div id="transition-layer"></div>
+        <script>
+            document.getElementById('migrate-localstorage').addEventListener('click', function () {
+                try {
+                    var payload = JSON.stringify(localStorage);
+                    var encoded = btoa(payload);
+                    var target = 'https://bookshelf2026.github.io/race?import=' + encodeURIComponent(encoded);
+                    window.location.href = target;
+                } catch (err) {
+                    console.error('LocalStorage migration failed', err);
+                    alert('Failed to export localStorage: ' + err.message);
+                }
+            });
+        </script>
     </body>
 </html>
